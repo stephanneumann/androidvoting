@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SDKGAchievementActivity" >
+
+    <TextView
+        android:id="@+id/id_lbl_privatekey_share_xi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/lbl_privatekey_share_xi" />
+
+    <View
+        android:id="@+id/View1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_lbl_privatekey_share_xi"
+        android:background="#33B5E5" />
+
+    <TextView
+        android:id="@+id/id_tv_privatekey_share_xi"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/View1"
+        android:textIsSelectable="true" />
+
+    <View
+        android:id="@+id/View2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_lbl_private_share_xi_"
+        android:background="#33B5E5" />
+
+    <TextView
+        android:id="@+id/id_tv_private_share_xi_"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/View2"
+        android:textIsSelectable="true" />
+
+    <View
+        android:id="@+id/View3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_lbl_publickey"
+        android:background="#33B5E5" />
+
+    <TextView
+        android:id="@+id/id_tv_publickey"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/View3"
+        android:textIsSelectable="true" />
+
+    <TextView
+        android:id="@+id/id_lbl_private_share_xi_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_tv_privatekey_share_xi"
+        android:layout_below="@+id/id_tv_privatekey_share_xi"
+        android:layout_marginTop="32dp"
+        android:text="@string/lbl_private_share_xi_" />
+
+    <TextView
+        android:id="@+id/id_lbl_publickey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_tv_private_share_xi_"
+        android:layout_below="@+id/id_tv_private_share_xi_"
+        android:layout_marginTop="28dp"
+        android:text="@string/lbl_publickey" />
+
+</RelativeLayout>

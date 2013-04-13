@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SmartDKG</string>
+    <string name="menu_settings">Settings</string>
+    <string name="btn_connect">Verbinden</string>
+    <string name="btn_close">Beenden</string>
+    <string name="title_activity_invitation">SmartDKG</string>
+    <string name="menu_all">All</string>
+    <string name="menu_none">None</string>
+    <string name="menu_invite">Invite</string>
+    <string name="title_activity_key_generation">SmartDKG</string>
+    <string name="title_activity_sdkgachievement">SmartDKG</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_privatekey_share_xi">private key share xi</string>
+    <string name="lbl_private_share_xi_">private share xi_</string>
+    <string name="lbl_publickey">public key</string>
+
+</resources>
