@@ -52,6 +52,11 @@ public class SDKGZqElement {
 		SDKGZqElement nPowMinusOne = e.getMultiplicativeInverse();
 		return mul(nPowMinusOne);
 	}
+	
+	public SDKGZqElement modPow(BigInteger exponent) {
+		BigInteger modPow = value.modPow(exponent, q);
+		return new SDKGZqElement(q, modPow);
+	}
 
 	public SDKGZqElement getAdditiveInverse() {
 		BigInteger dif = q.subtract(value).mod(q);

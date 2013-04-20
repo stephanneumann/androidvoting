@@ -21,27 +21,38 @@ public class SDKGLagrange {
 	 */
 	private BigInteger[] calculateLagrangeCoefficients(ArrayList<Integer> indices) {
 		BigInteger[] coefficients = new BigInteger[indices.size()];
+
+		for (int j = 0; j < indices.size(); j++) {
+			
+			coefficients[j] = this.getLagrangeCoefficient(j, indices);
+		}
+		return coefficients;
+	}
+	
+	/**
+	 * Compute Lagrange coefficient for a single j
+	 * @param j
+	 * @param indices
+	 * @return
+	 */
+	public BigInteger getLagrangeCoefficient(Integer j, ArrayList<Integer> indices){
 		BigInteger numerator;
 		BigInteger denominator;
 		BigInteger product;
+		
+		product = BigInteger.ONE;
 
-		for (int j = 0; j < indices.size(); j++) {
-			product = BigInteger.ONE;
-
-			for (int l = 0; l < indices.size(); l++) {
-				if (l == j) {
-					continue;
-				}
-				numerator = BigInteger.valueOf(indices.get(l)); // zaehler
-				denominator = BigInteger.valueOf(indices.get(l) - indices.get(j)); // nenner
-
-				BigInteger inv = denominator.modInverse(q);
-				product = product.multiply(numerator.multiply(inv).mod(q));
+		for (int l = 0; l < indices.size(); l++) {
+			if (l == j) {
+				continue;
 			}
+			numerator = BigInteger.valueOf(indices.get(l)); // zaehler
+			denominator = BigInteger.valueOf(indices.get(l) - indices.get(j)); // nenner
 
-			coefficients[j] = product;
+			BigInteger inv = denominator.modInverse(q);
+			product = product.multiply(numerator.multiply(inv).mod(q));
 		}
-		return coefficients;
+		return product;
 	}
 
 	// uses a set of n function values f1(x),...,fn(x) with given indices to reconstruct the constant term of a polynom

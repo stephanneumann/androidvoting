@@ -1,59 +1,51 @@
-package main;
+package com.oksana;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import com.murati.smartdkg.dkg.arithm.SDKGZqElement;
+
 /*Proofs that dlog(G) = dlog(H), with G = g^s mod q, H = h^s mod q, without disclosing s*/
-public class ZPKDlog {
-	BigInteger g,h,G,H,q;
+public class ZKPDlog {
+	SDKGZqElement g,h,G,H;
+	BigInteger q; 
 	
-	ZPKDlog(BigInteger g, BigInteger h, BigInteger G, BigInteger H, BigInteger q){
+	ZKPDlog(SDKGZqElement g, SDKGZqElement h, SDKGZqElement G, SDKGZqElement H){
 		this.G = G;
 		this.H = H;
-		this.q = q;
 		this.g = g;
 		this.h = h;
+		this.q = g.getOrder();
 	}
 	
-	BigInteger[] prove(BigInteger s){		
+	ZKPDlogProof prove(BigInteger s) throws NoSuchAlgorithmException{		
 		BigInteger r = new BigInteger(q.bitLength(), new Random()).mod(q);
-		BigInteger x1 = g.modPow(r,q);
-		BigInteger x2 = h.modPow(r,q);
+		SDKGZqElement x1 = g.modPow(r);
+		SDKGZqElement x2 = h.modPow(r);
 		String c = g.toString() + h.toString() + G.toString() + x1.toString() + x2.toString();
 		BigInteger e = BigInteger.ONE;
-		try{
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		sha.update(c.getBytes());
 		
 		e = new BigInteger(sha.digest()).mod(q);
-		}
-		catch(NoSuchAlgorithmException ex){
-			e = BigInteger.valueOf((long)c.hashCode()).mod(q); //just in case, should never happen as long as standard crypto libraries are used 
-		}
 		BigInteger y = r.add(e.multiply(s)).mod(q.subtract(BigInteger.ONE));
 		
-		BigInteger[] proof = {e,y};
-		return proof;
+		return new ZKPDlogProof(e, y);
 	}
 	
-	boolean verify(BigInteger[] proof){
-		BigInteger x1 = g.modPow(proof[1], q).multiply(G.modInverse(q).modPow(proof[0], q)).mod(q);
-		BigInteger x2 = h.modPow(proof[1], q).multiply(H.modInverse(q).modPow(proof[0], q)).mod(q);
+	boolean verify(ZKPDlogProof proof) throws NoSuchAlgorithmException{
+		SDKGZqElement x1 = g.modPow(proof.getY()).mul(G.getMultiplicativeInverse().modPow(proof.getE()));
+		SDKGZqElement x2 = h.modPow(proof.getY()).mul(H.getMultiplicativeInverse().modPow(proof.getE()));
 
 		String c = g.toString() + h.toString() + G.toString() + x1.toString() + x2.toString();
 		BigInteger e;
-		try{
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		sha.update(c.getBytes());
 		e = new BigInteger(sha.digest()).mod(q);
-		}
-		catch(NoSuchAlgorithmException ex){
-			e = BigInteger.valueOf((long)c.hashCode()).mod(q);  //just in case, should never happen
-		}
 		
-		return e.equals(proof[0]);
+		return e.equals(proof.getE());
 	}
 
 }
