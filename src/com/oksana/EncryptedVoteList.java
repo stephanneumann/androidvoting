@@ -21,5 +21,17 @@ public class EncryptedVoteList implements Iterable<EncryptedVote>{
 	public Iterator<EncryptedVote> iterator() {
 		return votes.iterator();
 	}
+	
+	public void add(EncryptedVote vote){
+		votes.add(vote);
+	}
+	
+	public EncryptedVote getByIndex(int index) {
+		for (EncryptedVote vote: votes) {
+			if (vote.getIndex() == index)
+				return vote;
+		}
+		return null; //TODO: Not found exc.
+	}
 
 }

@@ -3,13 +3,20 @@ package com.oksana;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.jivesoftware.smack.packet.Packet;
+
+import com.murati.smartdkg.communication.SDKGExtension;
+import com.murati.smartdkg.communication.SDKGMessage;
 import com.murati.smartdkg.dkg.SDKGElGamalParameters;
 import com.murati.smartdkg.dkg.SDKGFeldmanVSS;
 import com.murati.smartdkg.dkg.SDKGPedersenVSS;
 import com.murati.smartdkg.dkg.SDKGPlayer;
 import com.murati.smartdkg.dkg.SDKGPlayerList;
 import com.murati.smartdkg.dkg.arithm.SDKGZqElement;
+import com.murati.smartdkg.dkg.commitments.SDKGCikCommitment;
+import com.murati.smartdkg.dkg.commitments.SDKGShare;
 
 public class MainProtocol {
 	SDKGPedersenVSS pedersen;
@@ -20,6 +27,9 @@ public class MainProtocol {
 	
 	SDKGPlayer myself;
 	SDKGPlayerList players;
+	
+	HashMap<SDKGPlayer, SDKGZqElement> viCommitments;
+	VotesDecryptionSharesMap decryptionSharesMap;
 	
 	EncryptedVoteList encryptedVotes; //votes from all players
 	ArrayList<SDKGZqElement> decryptedVotes;
@@ -45,35 +55,11 @@ public class MainProtocol {
 	
 	void castVote(){
 		//TODO encrypt and save encrypted vote
+		EncryptedVote myVote = null; //for now, encrypted vote to cast
+		encryptedVotes.add(myVote);
 	}
 		
-	private SDKGZqElement decryptVote(EncryptedVote vote) throws NoSuchAlgorithmException{
-		decryption = new Decryption(myself, players, parameters, pedersen);
-		DecryptionShareList allShares = this.getOtherDecryptionShares(vote);
-		ArrayList<SDKGZqElement> validShares = decryption.getValidPD(allShares);
-		return decryption.reconstruct(validShares);
-	}
 	
-	private DecryptionShareList getOtherDecryptionShares(EncryptedVote vote) throws NoSuchAlgorithmException{
-		DecryptionShareList decryptionShares = new DecryptionShareList(vote, new ArrayList<DecryptionShare>());
-		decryptionShares.addDecryptionShare(decryption.getDecryptionShare(vote));
-		for (SDKGPlayer player : players){
-			decryptionShares.addDecryptionShare(this.getDecryptionShare(vote, player));
-		}
-		return decryptionShares;
-	}
-	
-	private DecryptionShare getDecryptionShare(EncryptedVote vote, SDKGPlayer player){
-		return new DecryptionShare();
-	}
-	
-	private void getDecryptedVotes() throws NoSuchAlgorithmException{
-		decryptedVotes = new ArrayList<>();
-		EncryptedVoteList encVotes = this.getEncryptedVotes();
-		for(EncryptedVote encVote : encVotes){
-			decryptedVotes.add(this.decryptVote(encVote));
-		}
-	}
 	
 	void tallyVotes(){
 		result = BigInteger.ZERO;
@@ -83,7 +69,32 @@ public class MainProtocol {
 	}
 	
 	private EncryptedVoteList getEncryptedVotes(){
-		//TODO
+		//TODO - also, add protection against players casting multiple votes
+		//Add temporary check, then integrate with mixnet
 		return null;
+	}
+	
+	static PacketData getDataFromPacket(Packet packet, SDKGPlayerList playersList){
+		SDKGExtension extension = (SDKGExtension) packet.getExtension(SDKGExtension.NAMESPACE);
+		extension.setFrom(packet.getFrom());
+		SDKGMessage msg = new SDKGMessage(extension);
+
+		SDKGPlayer sender = playersList.findPlayer(msg.getFrom());
+		SDKGPlayer receiver = playersList.findPlayer(msg.getTo());
+		
+		return new PacketData(receiver, sender, msg);
+	}
+	
+	public void processPacket(Packet packet) {
+		PacketData packetData = MainProtocol.getDataFromPacket(packet, players);
+
+		if (packetData.getMsg().isComplaintMessage()) { //isViCommitment
+			SDKGZqElement value = null; //TODO: change
+			viCommitments.put(packetData.getFrom(), value);
+		}
+		
+		else if(true) { //TODO clause
+			decryption.processPacket(packet);
+		}
 	}
 }

@@ -3,20 +3,17 @@ package com.oksana;
 import com.murati.smartdkg.dkg.arithm.SDKGZqElement;
 
 public class DecryptionShare {
-	public DecryptionShare() {
-		super(); //temp
-	}
-
-	public DecryptionShare(SDKGZqElement partialDecryption,
-			SDKGZqElement commitment, ZKPDlogProof proof) {
-		super();
+	public DecryptionShare(SDKGZqElement partialDecryption, ZKPDlogProof proof,
+			int playerIndex, int voteIndex) {
 		this.partialDecryption = partialDecryption;
-		this.commitment = commitment;
 		this.proof = proof;
+		this.playerIndex = playerIndex;
+		this.voteIndex = voteIndex;
 	}
 
-	private SDKGZqElement partialDecryption, commitment;
+	private SDKGZqElement partialDecryption;
 	private ZKPDlogProof proof;
+	private int playerIndex, voteIndex;
 	
 	ZKPDlogProof getProof(){
 		return proof;
@@ -25,9 +22,13 @@ public class DecryptionShare {
 	SDKGZqElement getPartialDecryption(){
 		return partialDecryption;
 	}
-	
-	SDKGZqElement getCommitment(){
-		return commitment;
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public int getVoteIndex() {
+		return voteIndex;
 	}
 
 }
