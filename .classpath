@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/example/xmppapp/messages/MessageType.java|com/example/xmppapp/util/Extension.java|com/example/xmppapp/util/RsaUtility.java|com/example/xmppapp/extensions/EncryptedExtension.java|com/example/xmppapp/extensions/SignedExtension.java|com/example/xmppapp/extensions/Extension.java|com/example/xmppapp/messages/basic/SecuredMessage.java|com/example/xmppapp/messages/basic/SignedMessage.java|com/example/xmppapp/dkg/PedersenVSS2.java|com/example/xmppapp/dkg/ShareVsCommitmentEquationList.java|com/example/xmppapp/dkg/PrivateKeyShare.java|com/example/xmppapp/comm/messages/ComplaintMessage.java|com/example/xmppapp/comm/messages/ComplaintResponseMessage.java|com/example/xmppapp/comm/messages/CProofMessage.java|com/example/xmppapp/comm/messages/ShareMessage.java|com/example/xmppapp/dkg/commitments/ShareList.java|com/example/xmppapp/comm/messages/JoinMessage.java|com/example/xmppapp/comm/messages/InitiationMessage.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="C:/Users/oksana/workspace/bcpkix-jdk15on-148/bcprov-jdk15on-148.jar"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="libs/asmack-android-7.jar"/>
-	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
-	<classpathentry kind="lib" path="libs/sc-bzip2-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/sc-light-jdk15on-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/scmail-jdk15on-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/scpg-jdk15on-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/scpkix-jdk15on-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/scprov-jdk15on-1.47.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shqiptar/Downloads/smack_3_2_2/smackx-debug.jar"/>
-	<classpathentry kind="lib" path="libs/smackx-debug.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
