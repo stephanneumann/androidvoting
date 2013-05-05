@@ -8,9 +8,9 @@ import com.androidvoting.murati.smartdkg.dkg.SDKGPlayer;
 import com.androidvoting.murati.smartdkg.dkg.SDKGPlayerList;
 import com.androidvoting.murati.smartdkg.dkg.commitments.SDKGShare;
 import com.androidvoting.murati.smartdkg.util.SDKGKeyFactory;
-import com.androidvoting.oksana.KeyAndCommitmentsInitilisation;
 import com.androidvoting.oksana.activities.DecryptionActivity;
 import com.androidvoting.oksana.application.UserData;
+import com.androidvoting.oksana.protocol.CommitmentsInitialisation;
 
 import org.jivesoftware.smack.XMPPConnection;
 import org.spongycastle.crypto.params.RSAPrivateCrtKeyParameters;
@@ -57,7 +57,7 @@ public class SDKGActivity extends Activity {
 
 	private SDKGFeldmanVSS mFeldmanVSS;
 
-	private KeyAndCommitmentsInitilisation kInit;
+	private CommitmentsInitialisation kInit;
 
 	public static SDKGPlayer mMyself;
 
@@ -132,22 +132,16 @@ public class SDKGActivity extends Activity {
 	}
 
 	private void initParameters() {
-		// mParameters = new SDKGElGamalParameters(
-		// new
-		// BigInteger("111930019642068417438074558300694340156587956555698629470914131330836670314842427722798502002216870944902305931917588433031384121138088787698419389634718106738115794820133084240137242264042332989162493496520794368826169308133135109412816743246243527430440142753378507026369668076190619700799456487551876054207"),
-		// new
-		// BigInteger("55965009821034208719037279150347170078293978277849314735457065665418335157421213861399251001108435472451152965958794216515692060569044393849209694817359053369057897410066542120068621132021166494581246748260397184413084654066567554706408371623121763715220071376689253513184834038095309850399728243775938027103"),
-		// new
-		// BigInteger("12318509937837929888838834232455081313733322516848738249994989592259774200977125571000223800320587912245829436105757095160635147284621372531144192989814017701233914661663531485996120741252505525438154553361499556894206592144928920270979230704532945448311642936631812488656116464564395748559909980854789757588"),
-		// new
-		// BigInteger("61601198452968981934024243593568896584644050084321195545281847260353806930420468138535099784007003507618238635858101694751395783669607650928427616580394080127775693780082110707911448994586005969639583176124058109021976128110393786060838259744480859019692922346626419323542740924919921871260219412702982287239"),
-		// (mPlayerList.size() - 1) / 2);
-		// mParameters.setH(new
-		// BigInteger("673579468550684626963338246201781336036082632436747167192743448778739813807099190185406837208980250557364889203899749778977623499946536199575645776461092871499606242059552299719033556265743924801123014687453528205968080498284919477043959734734835"));
-		mParameters = new SDKGElGamalParameters(new BigInteger("719"),
-				new BigInteger("359"), new BigInteger("540"), new BigInteger(
-						"309"), (mPlayerList.size() - 1) / 2);
-		mParameters.setH(new BigInteger("250"));
+		 mParameters = new SDKGElGamalParameters(
+		 new
+		 BigInteger("111930019642068417438074558300694340156587956555698629470914131330836670314842427722798502002216870944902305931917588433031384121138088787698419389634718106738115794820133084240137242264042332989162493496520794368826169308133135109412816743246243527430440142753378507026369668076190619700799456487551876054207"),
+		 new
+		 BigInteger("55965009821034208719037279150347170078293978277849314735457065665418335157421213861399251001108435472451152965958794216515692060569044393849209694817359053369057897410066542120068621132021166494581246748260397184413084654066567554706408371623121763715220071376689253513184834038095309850399728243775938027103"),
+		 new
+		 BigInteger("12318509937837929888838834232455081313733322516848738249994989592259774200977125571000223800320587912245829436105757095160635147284621372531144192989814017701233914661663531485996120741252505525438154553361499556894206592144928920270979230704532945448311642936631812488656116464564395748559909980854789757588"),
+		 new
+		 BigInteger("61601198452968981934024243593568896584644050084321195545281847260353806930420468138535099784007003507618238635858101694751395783669607650928427616580394080127775693780082110707911448994586005969639583176124058109021976128110393786060838259744480859019692922346626419323542740924919921871260219412702982287239"),
+		 (mPlayerList.size() - 1) / 2);
 	}
 
 	// Step 1: run an instance of pedersenVSS
@@ -164,11 +158,9 @@ public class SDKGActivity extends Activity {
 		mPlayerList.removeDisqualifiedPlayers();
 	}
 
-	public BigInteger sii, sj;
 
 	// Step 3: compute the shares xi of a secret key x and xi' for each player
 	public BigInteger[] computePrivateKeyShares() {
-		sii = mPedersenVSS.getMyShares()[0].getValue().mod(mParameters.getQ());
 		BigInteger xi = mPedersenVSS.getMyShares()[0].getValue(); // initialize
 																	// with sii
 		BigInteger xi_ = mPedersenVSS.getMyShares()[1].getValue(); // initialize
@@ -182,7 +174,6 @@ public class SDKGActivity extends Activity {
 
 			SDKGShare sji = mPedersenVSS.getReceivedShares().get(p)[0];
 			xi = xi.add(sji.getValue()).mod(mParameters.getQ());
-			sj = sji.getValue().mod(mParameters.getQ());
 
 			SDKGShare sji_ = mPedersenVSS.getReceivedShares().get(p)[1];
 			xi_ = xi_.add(sji_.getValue()).mod(mParameters.getQ());
@@ -359,30 +350,18 @@ public class SDKGActivity extends Activity {
 				
 				mParameters.setH(mPublicKey);
 				
-				new KeyAndCommitmentInitialisationTask().execute();
-
-//				String[] data = new String[] { mPrivateKeyShare.toString(),
-//						mPrivateShare.toString(), mPublicKey.toString() };
-
-				// Bundle bundle = new Bundle();
-				// bundle.putStringArray(COMPUTED_VALUES, data);
-				// Intent intent = new Intent(context,
-				// SDKGAchievementActivity.class);
-				// intent.putExtras(bundle);
-				// //Intent intent = new Intent(context,
-				// DecryptionActivity.class);
-				// startActivity(intent);
+				new CommitmentInitialisationTask().execute();
 			}
 		}
 	}
 
 	private void runKeyandCommitmentsInitilisation() {
-		kInit = new KeyAndCommitmentsInitilisation(mParameters, mSessionId,
+		kInit = new CommitmentsInitialisation(mParameters, mSessionId,
 				mConnection, context, mMyself, mPlayerList, mPrivateKeyShare);
 		kInit.execute();
 	}
 
-	private class KeyAndCommitmentInitialisationTask extends
+	private class CommitmentInitialisationTask extends
 			AsyncTask<Void, String, Void> {
 		
 		@Override
@@ -435,9 +414,16 @@ public class SDKGActivity extends Activity {
 			if (kInit.executionFinished()) {
 				progressDialog.setMessage("protocol execution finished...");
 				progressDialog.dismiss();
-
-				 Intent intent = new Intent(context,
-				 DecryptionActivity.class);
+				
+//				String[] data = new String[] { mPrivateKeyShare.toString(),
+//						mPrivateShare.toString(), mPublicKey.toString() };
+//
+//				 Bundle bundle = new Bundle();
+//				 bundle.putStringArray(COMPUTED_VALUES, data);
+//				 Intent intent = new Intent(context,
+//				 SDKGAchievementActivity.class);
+//				 intent.putExtras(bundle);
+				Intent intent = new Intent(context, DecryptionActivity.class);
 				 startActivity(intent);
 			}
 		}

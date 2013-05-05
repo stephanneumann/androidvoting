@@ -9,12 +9,15 @@ import java.security.PublicKey;
 import org.spongycastle.openssl.PEMWriter;
 
 import com.androidvoting.R;
+import com.androidvoting.oksana.activities.DecryptionActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 
 public class SDKGAchievementActivity extends Activity {
@@ -71,6 +74,11 @@ public class SDKGAchievementActivity extends Activity {
 				Log.e("xx", "could not close bufferedwriter");
 			}
 		}
+	}
+	
+	public void proceed(View view) {
+	    Intent intent = new Intent(this, DecryptionActivity.class);
+	    startActivity(intent);
 	}
 
 }

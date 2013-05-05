@@ -13,11 +13,14 @@ public class DecryptionResults extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_decryption_results);
+		//setContentView(R.layout.activity_decryption_results);
+		TextView tx = new TextView(this);
+		String msg = "Votes: \n";
 		for (SDKGZqElement vote : DecryptionActivity.DECRYPTED_VOTES) {
-			TextView tx = new TextView(this);
-			tx.setText(vote.toString());
+			msg += vote.toString() + "\n";
 		}
+		tx.setText(msg);
+		setContentView(tx);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class SDKGLagrange {
 	/*
 	 * calculation of the lagrange coefficients lambda_j = l / l-j
 	 */
-	private BigInteger[] calculateLagrangeCoefficients(ArrayList<Integer> indices) {
+	public BigInteger[] calculateLagrangeCoefficients(ArrayList<Integer> indices) {
 		BigInteger[] coefficients = new BigInteger[indices.size()];
 
 		for (int j = 0; j < indices.size(); j++) {

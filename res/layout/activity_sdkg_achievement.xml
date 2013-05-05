@@ -84,4 +84,13 @@
         android:layout_marginTop="28dp"
         android:text="@string/lbl_publickey" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="proceed"
+        android:text="Next" />
+
 </RelativeLayout>

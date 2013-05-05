@@ -6,12 +6,12 @@ import org.jivesoftware.smack.XMPPConnection;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
-import android.widget.TextView;
 
 import com.androidvoting.R;
 import com.androidvoting.murati.smartdkg.activities.SDKGActivity;
@@ -20,10 +20,10 @@ import com.androidvoting.murati.smartdkg.dkg.SDKGElGamalParameters;
 import com.androidvoting.murati.smartdkg.dkg.SDKGPlayer;
 import com.androidvoting.murati.smartdkg.dkg.SDKGPlayerList;
 import com.androidvoting.murati.smartdkg.dkg.arithm.SDKGZqElement;
-import com.androidvoting.oksana.Decryption;
-import com.androidvoting.oksana.Decryption.State;
-import com.androidvoting.oksana.KeyAndCommitmentsInitilisation;
-import com.androidvoting.oksana.EncryptedVote;
+import com.androidvoting.oksana.data.EncryptedVote;
+import com.androidvoting.oksana.protocol.CommitmentsInitialisation;
+import com.androidvoting.oksana.protocol.Decryption;
+import com.androidvoting.oksana.protocol.Decryption.State;
 
 public class DecryptionActivity extends Activity {
 	private XMPPConnection connection = SDKGConnectionActivity.CURRENT_CONNECTION;
@@ -56,7 +56,7 @@ public class DecryptionActivity extends Activity {
 		initParameters();
 		// // //initLoadKeys();
 		// //
-		BigInteger[] votes = { BigInteger.valueOf(123) };
+		BigInteger[] votes = { BigInteger.valueOf(123), BigInteger.valueOf(456), BigInteger.valueOf(789) };
 		SparseArray<EncryptedVote> votesMap = new SparseArray<EncryptedVote>();
 		int i = 0;
 		for (BigInteger vote : votes) {
@@ -69,14 +69,14 @@ public class DecryptionActivity extends Activity {
 		
 			EncryptedVote v = new EncryptedVote(new SDKGZqElement(
 					parameters.getP(), a), new SDKGZqElement(parameters.getP(),
-					b));
+					b), i);
 			votesMap.put(i, v);
 			i++;
 		}
 
 		this.decryption = new Decryption(sessionId,
 				connection, context, myself, players, parameters, votesMap,
-				KeyAndCommitmentsInitilisation.commitmentsMap);
+				CommitmentsInitialisation.commitmentsMap);
 				
 		new DecryptionTask().execute();
 	}
@@ -172,12 +172,12 @@ public class DecryptionActivity extends Activity {
 						.setMessage("PlayerNr: " + myself.getIndex() + ", protocol execution finished... vote is "
 								+ decryption.getDecryptedVotes().get(0)
 										.toString());
-				// progressDialog.dismiss();
-				//
-				// DECRYPTED_VOTES = decryption.getDecryptedVotes();
-				//
-				// Intent intent = new Intent(context, DecryptionResults.class);
-				// startActivity(intent);
+				 progressDialog.dismiss();
+				
+				 DECRYPTED_VOTES = decryption.getDecryptedVotes();
+				
+				 Intent intent = new Intent(context, DecryptionResults.class);
+				 startActivity(intent);
 			}
 
 			else if (decryption.getCurrentState() == State.ERROR) {
